@@ -598,6 +598,11 @@ where
                         // TODO: see if this can be optimized with drain
                         let end = {
                             let data = res.get_ref();
+                            if data.len() == 0 {
+                                return Err(Error::new(
+                                    Kind::Protocol, 
+                                    "The handshake attempt failed because the length of the data read was 0."));
+                            }
                             let end = data.iter()
                                 .enumerate()
                                 .take_while(|&(ind, _)| !data[..ind].ends_with(b"\r\n\r\n"))
